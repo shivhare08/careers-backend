@@ -107,6 +107,19 @@ userRouter.post('/jobapply',userAuth, async(req,res)=>{
     }
 })
 
+userRouter.get('/allapplications',async (req,res)=>{
+    try{
+        const data = await careersModel.find().sort({_id:-1})
+        res.json({
+            applications : data
+        })
+        // console.log(data);
+        
+    }catch(e){
+        console.log(e);
+    }
+})
+
 userRouter.get('/myapplications',userAuth,async (req,res)=>{
     try{
         const data = await applyModel.find({userId : req.id})

@@ -2,7 +2,9 @@ const express = require('express')
 const app = express();
 const port = 8520;
 const mongoose = require('mongoose');
+const cors = require('cors')
 
+app.use(cors());
 
 const userRouter = require('./controllers/userController');
 const adminRouter = require('./controllers/adminController');
