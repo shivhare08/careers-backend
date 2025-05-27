@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { type } = require('os');
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
@@ -17,8 +18,15 @@ const userSchema = new Schema({
 
     password:{
         type :String
+    },
+
+    image : {
+        public_id : String,
+        url:String,
+            //required:true
+        
     }
-})
+},{timestamps : true})
 
 const userModel = mongoose.model('users',userSchema);
 
@@ -94,9 +102,26 @@ const appliedSchema = new Schema({
 
 const applyModel = mongoose.model('applie',appliedSchema);
 
+const contactSchema = new Schema({
+    name : {
+        type:String,
+    },
+    email:{
+        type : String
+    },
+    message :{
+        type:String,
+    }
+
+})
+
+const contactModel = mongoose.model('contact',contactSchema);
+
+
 module.exports ={
     userModel : userModel,
     adminModel : adminModel,
     careersModel : careersModel,
-    applyModel : applyModel
+    applyModel : applyModel,
+    contactModel : contactModel
 }

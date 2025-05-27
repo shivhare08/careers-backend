@@ -1,5 +1,5 @@
 const express = require('express');
-const { adminModel ,applyModel, careersModel} = require('../database');
+const { adminModel, applyModel, careersModel, contactModel, userModel } = require('../database');
 const adminRouter = express.Router();
 const jwt_key_admin = "admin"
 const zod = require('zod');
@@ -105,14 +105,14 @@ adminRouter.post('/addjob', adminAuth, async (req, res) => {
             salary,
             location,
             aggrement,
-            jobAddedBy : {
-                name : details.name,
-                department : details.department
+            jobAddedBy: {
+                name: details.name,
+                department: details.department
             }
-        }) 
+        })
 
         res.json({
-            status : "job is added"
+            status: "job is added"
         })
 
     } catch (e) {
@@ -120,15 +120,27 @@ adminRouter.post('/addjob', adminAuth, async (req, res) => {
     }
 })
 
-adminRouter.get('/allapplications',adminAuth,async (req,res)=>{
-    try{
+adminRouter.get('/allapplications', adminAuth, async (req, res) => {
+    try {
         const data = await applyModel.find();
         res.json({
-            applications : data
+            applications: data
         })
-    }catch(e){
+    } catch (e) {
         console.log(e);
     }
 })
+
+// adminRouter.get('/allusers', adminAuth, async (req, res) => {
+//     try {
+//         const data = await userModel.find();
+//         res.json({
+//             data: data
+//         })
+//     } catch (e) {
+//         console.log(e);
+//     }
+// })
+
 
 module.exports = adminRouter

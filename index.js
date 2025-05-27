@@ -3,16 +3,25 @@ const app = express();
 const port = 8520;
 const mongoose = require('mongoose');
 const cors = require('cors')
+const cloudinary = require('cloudinary');
+const expressFileUpload = require('express-fileupload');
+
 
 app.use(cors());
 
 const userRouter = require('./controllers/userController');
 const adminRouter = require('./controllers/adminController');
 const careersRouter = require('./controllers/careersController');
+const contactRouter = require('./controllers/contactController');
 
 
 
 mongoose.connect('mongodb+srv://shivhares2002:mww8frbY4dnHF92a@cluster0.gq0hu.mongodb.net/basicBackend');
+
+app.use(express.urlencoded({extended:false}));
+app.use(expressFileUpload({
+    useTempFiles:true
+}))
 
 app.use(express.json());
 
@@ -24,6 +33,7 @@ app.get('/', (req, res) => {
 app.use('/user',userRouter);
 app.use('/admin',adminRouter);
 app.use('/careers',careersRouter);
+app.use('/contact',contactRouter)
 
 
 

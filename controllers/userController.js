@@ -6,6 +6,14 @@ const zod = require('zod');
 const jwt = require('jsonwebtoken');
 const userAuth = require('../middleman/userAuth');
 const jwt_key_user = "users"
+const cloudinary = require('cloudinary').v2;
+
+
+cloudinary.config({ 
+  cloud_name: 'daa5rkqdc', 
+  api_key: '843127716237467', 
+  api_secret: 'vmk7PCGmjeisM9miWLQWIqazHhs'
+});
 
 
 userRouter.post('/signup', async (req, res) => {
@@ -14,6 +22,19 @@ userRouter.post('/signup', async (req, res) => {
     const phone = req.body.phone;
     const city = req.body.city;
     const password = req.body.password;
+    const file = req.files.image
+
+    const existingUser = await userModel.findOne({phone : phone});
+    if(existingUser){
+        // res.json({
+        //     message : "phone is already exist"
+        // })
+        return;
+    }
+
+    const myfile = await cloudinary.uploader.upload(file.tempFilePath,{
+        folder : 'users_images'
+    })
     try {
 
         const zodAuthentication = zod.object({
@@ -37,7 +58,11 @@ userRouter.post('/signup', async (req, res) => {
             name,
             phone,
             city,
-            password : hashPassword
+            password : hashPassword,
+            image:{
+                public_id : myfile.public_id,
+                url:myfile.secure_url
+            }
             
         })
         res.json({
@@ -69,13 +94,24 @@ userRouter.post('/signin',async(req,res) =>{
 
             res.json({
                 status: "login done successfully",
-                your_token : token, 
+                token : token, 
             })
         }else{
             res.json({
                 status : "invalid user"
             })
         }
+    }catch(e){
+        console.log(e);
+    }
+})
+
+userRouter.get('/myprofile',userAuth ,async(req,res)=>{
+    try{
+        const data = await userModel.find({_id : req.id});
+        res.json({
+            data : data
+        })
     }catch(e){
         console.log(e);
     }
@@ -107,7 +143,7 @@ userRouter.post('/jobapply',userAuth, async(req,res)=>{
     }
 })
 
-userRouter.get('/allapplications',async (req,res)=>{
+userRouter.get('/allapplications',userAuth,async (req,res)=>{
     try{
         const data = await careersModel.find().sort({_id:-1})
         res.json({
@@ -130,5 +166,13 @@ userRouter.get('/myapplications',userAuth,async (req,res)=>{
         console.log(e);
     }
 })
+
+// userRouter.get('/logout',userAuth ,async (req,res)=>{
+//     try{
+//         localStorage.removeItem('token')
+//     }catch(e){
+//         console.log(e);
+//     }
+// })
 
 module.exports = userRouter;
