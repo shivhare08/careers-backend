@@ -52,6 +52,9 @@ const careersSchema = new Schema({
     title : {
         type : String,
     },
+    type :{
+        type :String
+    },
     experience : {
         type : String,
     },
@@ -77,7 +80,7 @@ const careersSchema = new Schema({
         name : String,
         department : String,
     }
-})
+},{timestamps:true})
 
 const careersModel = mongoose.model('jobs',careersSchema);
 
@@ -96,6 +99,9 @@ const appliedSchema = new Schema({
     },
     jobLocation : {
         type : String
+    },
+    didYouApplied:{
+        type:Boolean
     }
 
 })
@@ -117,11 +123,23 @@ const contactSchema = new Schema({
 
 const contactModel = mongoose.model('contact',contactSchema);
 
+// const notificationSchema = new Schema({
+//     title:{
+//         type:String
+//     },
+//     userName:{
+//         type:String
+//     },
+
+// },{timestamps:true})
+
+//const notificationsModel = mongoose.model('notification',notificationSchema)
 
 module.exports ={
     userModel : userModel,
     adminModel : adminModel,
     careersModel : careersModel,
     applyModel : applyModel,
-    contactModel : contactModel
+    contactModel : contactModel,
+    //notificationsModel : notificationsModel
 }

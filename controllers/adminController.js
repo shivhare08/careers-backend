@@ -59,7 +59,7 @@ adminRouter.post('/signin', async (req, res) => {
         const finddepartment = await adminModel.findOne({ department: department });
         if (!finddepartment) {
             res.json({
-                status: "sorry , this number is not exist"
+                status: "sorry , this admin is not exist"
             })
             return;
         }
@@ -72,7 +72,7 @@ adminRouter.post('/signin', async (req, res) => {
 
             res.json({
                 status: "login done successfully",
-                your_token: token,
+                token: token,
             })
         } else {
             res.json({
@@ -87,6 +87,7 @@ adminRouter.post('/signin', async (req, res) => {
 adminRouter.post('/addjob', adminAuth, async (req, res) => {
     try {
         const title = req.body.title;
+        const type = req.body.type
         const experience = req.body.experience;
         const courses = req.body.courses;
         const batch = req.body.batch;
@@ -98,6 +99,7 @@ adminRouter.post('/addjob', adminAuth, async (req, res) => {
         const details = await adminModel.findById(req.id);
         const createJob = await careersModel.create({
             title,
+            type,   
             experience,
             courses,
             batch,
@@ -131,16 +133,26 @@ adminRouter.get('/allapplications', adminAuth, async (req, res) => {
     }
 })
 
-// adminRouter.get('/allusers', adminAuth, async (req, res) => {
-//     try {
-//         const data = await userModel.find();
-//         res.json({
-//             data: data
-//         })
-//     } catch (e) {
-//         console.log(e);
-//     }
-// })
+adminRouter.get('/allusers',adminAuth , async(req,res)=>{
+    try{
+        const data = await userModel.find();
+        res.json({
+            data : data
+        })
+    } catch(e){ 
+        console.log(e);
+    }
+})
 
+adminRouter.get('/myprofile',adminAuth ,async(req,res)=>{
+    try{
+        const data = await adminModel.find({_id : req.id});
+        res.json({
+            data : data
+        })
+    }catch(e){
+        console.log(e);
+    }
+})
 
 module.exports = adminRouter

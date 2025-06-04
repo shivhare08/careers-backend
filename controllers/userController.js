@@ -119,9 +119,23 @@ userRouter.get('/myprofile',userAuth ,async(req,res)=>{
 
 userRouter.post('/jobapply',userAuth, async(req,res)=>{
     try{
-
         const user = await userModel.findById(req.id);
         const title = req.body.title
+        const didYouApplied = req.body.didYouApplied
+        if(didYouApplied == null){
+            didYouApplied = false
+        }
+        
+        const jobmatch = await applyModel.findOne({
+            title:title,
+            userId:req.id
+        });
+        if(jobmatch){
+            res.json({
+                status:"already applied"
+            })
+            return;
+        }
         // console.log(user.name);
         const jobDetails = await careersModel.findOne({title : title});
         // console.log(jobDetails.salary);
@@ -129,9 +143,10 @@ userRouter.post('/jobapply',userAuth, async(req,res)=>{
         const data = await applyModel.create({
             username : user.name,
             userId : req.id,
-            title,
+            title:jobDetails.title,
             jobId : jobDetails._id,
-            jobLocation : jobDetails.location
+            jobLocation : jobDetails.location,
+            didYouApplied : didYouApplied
          })
             res.json({
                 status : `you have applied for ${title} role`,
@@ -167,12 +182,17 @@ userRouter.get('/myapplications',userAuth,async (req,res)=>{
     }
 })
 
-// userRouter.get('/logout',userAuth ,async (req,res)=>{
-//     try{
-//         localStorage.removeItem('token')
-//     }catch(e){
-//         console.log(e);
-//     }
-// })
+userRouter.get('/notifications',userAuth,async (req,res)=>{
+    try{
+        const jobs = await careersModel.find();
+        res.json({
+            jobs
+        })
+
+    }catch(e){
+        console.log(e);
+    }
+})
+
 
 module.exports = userRouter;
