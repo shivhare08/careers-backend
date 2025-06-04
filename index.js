@@ -16,8 +16,12 @@ const contactRouter = require('./controllers/contactController');
 
 
 
-mongoose.connect('mongodb+srv://shivhares2002:mww8frbY4dnHF92a@cluster0.gq0hu.mongodb.net/basicBackend');
+//mongoose.connect('mongodb+srv://shivhares2002:mww8frbY4dnHF92a@cluster0.gq0hu.mongodb.net/basicBackend');
+function connectdb(){
+    mongoose.connect('mongodb+srv://shivhares2002:PEeCWWtEZ59joFb3@cluster0.idnifnn.mongodb.net/careersApp')
+}
 
+connectdb();
 app.use(express.urlencoded({extended:false}));
 app.use(expressFileUpload({
     useTempFiles:true
