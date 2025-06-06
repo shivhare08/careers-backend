@@ -16,14 +16,14 @@ const contactRouter = require('./controllers/contactController');
 
 
 
-//mongoose.connect('mongodb+srv://shivhares2002:mww8frbY4dnHF92a@cluster0.gq0hu.mongodb.net/basicBackend');
+mongoose.connect('mongodb+srv://shivhares2002:mww8frbY4dnHF92a@cluster0.gq0hu.mongodb.net/basicBackend');
 //export const live_url = "mongodb+srv://shivhares2002:FIZDM8qUwguT9Zhh@courseera-app.d8d6i.mongodb.net/?retryWrites=true&w=majority&appName=courseera-app"
-function connectdb(){
-    mongoose.connect('mongodb+srv://shivhares2002:sKLbFn9xGnIalYnx@cluster0.idnifnn.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'
-    )
-}
+// function connectdb(){
+//     mongoose.connect('mongodb+srv://shivhares2002:vA5koFSpNO1GstMb@cluster0.idnifnn.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'
+//     )
+// }
 
-connectdb();
+//connectdb();
 app.use(express.urlencoded({extended:false}));
 app.use(expressFileUpload({
     useTempFiles:true
